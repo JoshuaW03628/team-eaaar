@@ -1,3 +1,2 @@
-# BARN Project
-> 🏈 Hub for sports discussion, trivia and statistics.
-> My Trimester 2 AP Computer Science Principles final project
+# Team Eaaar 👂
+> Repo for demonstrating data structures with interactive visualizations and simulations
