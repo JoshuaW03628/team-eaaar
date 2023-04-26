@@ -94,7 +94,7 @@ Dashboard
       let newItem = parseInt(document.getElementById("newItem").value);
       let index = parseInt(document.getElementById("index").value);
       if (!isNaN(newItem) && !isNaN(index) && index >= 0 && index <= myList.length) {
-        myList.splice(index, 0, newItem);
+        myList.splice(index - 1, 0, newItem);
         visualizeList();
       }
     }
