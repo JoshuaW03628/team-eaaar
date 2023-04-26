@@ -28,33 +28,15 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(15), unique=True)
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(80))
-    _correct = db.Column(db.Integer)
-    _incorrect = db.Column(db.Integer)
 
     def init_user(self):
-        self._correct = 0
-        self._incorrect = 0
         print("init user success")
-
-    @property
-    def correct(self):
-        return self._correct
-    
-    @property
-    def incorrect(self):
-        return self._incorrect
-    
-    def incrementCorrect(self):
-        self._correct += 1
-
-    def incrementIncorrect(self):
-        self._incorrect += 1
 
     def to_dict(self):
         return {
             "username": self.username,
-            "correct": self._correct,
-            "incorrect": self._incorrect,
+            "email": self.email,
+            "password": self.password,
         }
 
 @login_manager.user_loader
@@ -117,20 +99,10 @@ def signup():
 def dashboard():
     return render_template('dashboard.html', name=current_user.username)
 
-@app.route('/timer')
+@app.route('/hacks')
 @login_required
-def timer():
-    return render_template('timer.html', name=current_user.username)
-
-@app.route('/search')
-@login_required
-def search():
-    return render_template('search.html')
-
-@app.route('/quiz')
-@login_required
-def quiz():
-    return render_template('quiz.html', id=current_user.id)
+def hacks():
+    return render_template('hacks.html', name=current_user.username)
 
 @app.route('/logout')
 @login_required

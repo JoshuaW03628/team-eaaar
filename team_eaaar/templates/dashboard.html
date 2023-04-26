@@ -1,0 +1,354 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='styles.css')}}">
+<link href='http://fonts.googleapis.com/css?family=Poppins' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #0a0a0a">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+        aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="dashboard">Team Eaar</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('hacks') }}">Hacks 👂</a></li>
+        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="center" style="padding-top: 50px;">
+  <h1 style="font-weight: bolder;">Hey {{name}}!</h1>
+  <h4>P4 Mort Data Structures Simulations & Visualizations</h4>
+</div>
+
+<div class="container data-container">
+
+  <h2 class="title">
+    Lists
+  </h2>
+
+  <div class="center">
+    <div id="list" style="display: flex; flex-direction: row; justify-content: space-evenly;"></div>
+    <div style="display: flex; flex-direction: row; margin-top: 10px;">
+      <input type="text" id="newItem" placeholder="New item">
+      <button onclick="pushToList()">Push</button>
+    </div>
+    <div style="display: flex; flex-direction: row; margin-top: 10px;">
+      <input type="text" id="index" placeholder="Index">
+      <button onclick="insertToList()">Insert</button>
+    </div>
+    <div style="display: flex; flex-direction: row; margin-top: 10px;">
+      <button onclick="sortList()" style="margin-right: 10px;">Sort</button>
+      <button onclick="popFromList()">Pop</button>
+    </div>
+
+  </div>
+
+  <script>
+
+    let myList = [10, 5, 8, 3, 6];
+
+    function visualizeList() {
+      let listDiv = document.getElementById("list");
+      listDiv.innerHTML = "";
+      for (let i = 0; i < myList.length; i++) {
+        let listItem = document.createElement("div");
+        listItem.innerText = myList[i];
+        listItem.style.padding = "4px";
+        listItem.style.margin = "4px";
+        listItem.style.borderStyle = "solid";
+        listDiv.appendChild(listItem);
+      }
+    }
+
+    function pushToList() {
+      let newItem = parseInt(document.getElementById("newItem").value);
+      if (!isNaN(newItem)) {
+        myList.push(newItem);
+        visualizeList();
+      }
+    }
+
+    function popFromList() {
+      myList.pop();
+      visualizeList();
+    }
+
+    function insertToList() {
+      let newItem = parseInt(document.getElementById("newItem").value);
+      let index = parseInt(document.getElementById("index").value);
+      if (!isNaN(newItem) && !isNaN(index) && index >= 0 && index <= myList.length) {
+        myList.splice(index, 0, newItem);
+        visualizeList();
+      }
+    }
+
+    function sortList() {
+      myList.sort((a, b) => a - b);
+      visualizeList();
+    }
+
+    visualizeList();
+  </script>
+
+</div>
+
+<div class="container data-container">
+
+  <h2 class="title">
+    2D Arrays
+  </h2>
+
+  <div class="center">
+    <div style="display: flex; flex-direction: row; justify-items: space-between;">
+      <label for="rows">Rows (1-10):</label>
+      <input type="number" id="rows" name="rows" min="1" max="10" value="3" style="margin-right: 12px;">
+      <label for="cols">Columns (1-10):</label>
+      <input type="number" id="cols" name="cols" min="1" max="10" value="3" style="margin-right: 12px;">
+      <button onclick="generateArray()">Generate</button>
+    </div>
+    <table id="array" style="margin-top: 12px;">
+    </table>
+  </div>
+
+  <script>
+    let data = [];
+
+    function generateArray() {
+      const rows = parseInt(document.getElementById('rows').value);
+      const cols = parseInt(document.getElementById('cols').value);
+
+      const newData = [];
+      for (let row = 0; row < rows; row++) {
+        const rowData = [];
+        for (let col = 0; col < cols; col++) {
+          if (row < data.length && col < data[row].length) {
+            rowData.push(data[row][col]);
+          } else {
+            rowData.push(Math.floor(Math.random() * 256));
+          }
+        }
+        newData.push(rowData);
+      }
+
+      data = newData;
+      drawArray(data);
+    }
+
+    function drawArray(data) {
+
+      const table = document.getElementById('array');
+      table.innerHTML = '';
+
+      // Loop through the rows and columns of the 2D array
+      for (let row = 0; row < data.length; row++) {
+        const tr = document.createElement('tr');
+        for (let col = 0; col < data[row].length; col++) {
+          const value = data[row][col];
+          const td = document.createElement('td');
+          td.textContent = value;
+          td.style.backgroundColor = `rgb(${value}, ${value}, ${value})`;
+          td.style.width = "50px"
+          td.style.height = "50px"
+          td.addEventListener('click', function () {
+            data[row][col] = Math.floor(Math.random() * 256);
+            drawArray(data);
+          });
+
+          const p = document.createElement('p')
+          p.textContent = "(" + row + ", " + col + ")"
+          p.style.color = "black"
+          p.setAttribute("class", "coordinate")
+
+          td.appendChild(p)
+
+          tr.appendChild(td);
+
+        }
+
+        table.appendChild(tr);
+      }
+    }
+
+    generateArray();
+  </script>
+
+</div>
+
+<div class="container data-container">
+
+  <h2 class="title">
+    Dictionaries
+  </h2>
+  
+  <div class="center">
+    <table style="border-style: solid;">
+      <thead>
+        <tr>
+          <th style="border-style: solid;">Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody id="dict-table">
+      </tbody>
+    </table>
+    
+    <div style="margin-top: 12px;">
+
+      <form>
+        <label for="key-input">Key:</label>
+        <input id="key-input" type="text" name="key">
+        <label for="value-input">Value:</label>
+        <input id="value-input" type="text" name="value">
+        <button type="button" onclick="addDictPair()">Add</button>
+      </form>
+    </div>
+  </div>
+
+<script>
+  let dict = {
+    "key1": "value1",
+    "key2": "value2",
+    "key3": "value3",
+    "key4": "value4"
+  };
+  let dictTable = document.getElementById("dict-table");
+  let dictKeys = Object.keys(dict);
+  let dictValues = Object.values(dict);
+  let dictSize = Object.keys(dict).length;
+
+  // Function to update the dictionary table with the current dictionary object
+  function updateDictTable() {
+    // Clear the current table rows
+    dictTable.innerHTML = "";
+
+    // Add a new row for each key-value pair in the dictionary object
+    for (let i = 0; i < dictSize; i++) {
+      const row = document.createElement("tr");
+      const keyCell = document.createElement("td");
+      const valueCell = document.createElement("td");
+      keyCell.textContent = dictKeys[i];
+      keyCell.style.padding = "10px"
+      keyCell.style.borderStyle = "solid"
+      valueCell.textContent = dictValues[i];
+      valueCell.style.padding = "10px"
+      valueCell.style.borderStyle = "solid"
+      row.appendChild(keyCell);
+      row.appendChild(valueCell);
+      dictTable.appendChild(row);
+    }
+  }
+
+  // Function to add a new key-value pair to the dictionary object and table
+  function addDictPair() {
+    const keyInput = document.getElementById("key-input");
+    const valueInput = document.getElementById("value-input");
+    const newKey = keyInput.value;
+    const newValue = valueInput.value;
+    if (newKey && newValue && !dict.hasOwnProperty(newKey)) {
+      dict[newKey] = newValue;
+      dictKeys.push(newKey);
+      dictValues.push(newValue);
+      dictSize++;
+      updateDictTable();
+      keyInput.value = "";
+      valueInput.value = "";
+    }
+  }
+
+  // Function to remove a key-value pair from the dictionary object and table
+  function removeDictPair(key) {
+    const index = dictKeys.indexOf(key);
+    if (index > -1) {
+      dictKeys.splice(index, 1);
+      dictValues.splice(index, 1);
+      dictSize--;
+      delete dict[key];
+      updateDictTable();
+    }
+  }
+
+  updateDictTable();
+</script>
+
+</div>
+
+<div class="container data-container">
+  <h2 class="title">
+    Databases & Data Structures
+  </h2>
+
+  <div class="center">
+    <table id="table">
+    </table>
+    <p style="text-align: center;">
+      This table was generated from a GET request accessing data within your local database. Check console logs!
+    </p>
+  </div>
+
+  <script>
+
+    const table = document.getElementById("table")
+
+    var url = "{{ url }}data"
+    var options = {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'default',
+      credentials: 'omit',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }
+
+    fetch(url, options)
+      .then(response => response.json())
+      .then(data => {
+
+        console.log(data)
+
+        for(row in data) {
+
+          var newRow = document.createElement("tr")
+            
+          var colID = document.createElement("td")
+          colID.textContent = data[row]["id"]
+          colID.style.borderStyle = "solid"
+          colID.style.padding = "4px"
+            
+          var colData = document.createElement("td")
+          colData.textContent = data[row]["col"]
+          colData.style.borderStyle = "solid"
+          colData.style.padding = "4px"
+
+          newRow.appendChild(colID)
+          newRow.appendChild(colData)
+
+          table.appendChild(newRow)
+        }
+
+      })
+      .catch(error => console.error(error));
+  
+  </script>
+
+</div>
+
+
+{% endblock %}
