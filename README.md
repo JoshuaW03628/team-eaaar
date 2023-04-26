@@ -7,7 +7,7 @@ python main.py
 ```
 
 
-> May have to clear database using the python terminal:
+> May have to clear database using the python terminal
 ```cmd
 python
 > from main import app, db
